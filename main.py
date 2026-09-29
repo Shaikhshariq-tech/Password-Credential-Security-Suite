@@ -96,43 +96,61 @@ def run_password_strength_analysis(workflow: LabWorkflow) -> None:
 
     print_subsection("PASSWORD ANALYSIS")
 
-    print_key_value("Length", result.length)
-    print_key_value("Character space", result.character_space)
+    print_key_value(
+        "Length",
+        result.password_length,
+    )
+    print_key_value(
+        "Character space",
+        result.character_space,
+    )
     print_key_value(
         "Entropy bits",
         f"{result.entropy_bits:.2f}",
     )
-    print_key_value("Lowercase", result.has_lowercase)
-    print_key_value("Uppercase", result.has_uppercase)
-    print_key_value("Digits", result.has_digits)
-    print_key_value("Symbols", result.has_symbols)
+    print_key_value(
+        "Lowercase",
+        result.has_lowercase,
+    )
+    print_key_value(
+        "Uppercase",
+        result.has_uppercase,
+    )
+    print_key_value(
+        "Digits",
+        result.has_digits,
+    )
+    print_key_value(
+        "Symbols",
+        result.has_symbols,
+    )
     print_key_value(
         "Unique characters",
         result.unique_characters,
     )
     print_key_value(
         "Common password",
-        result.is_common_password,
+        result.common_password,
     )
     print_key_value(
         "Repeated pattern",
-        result.has_repeated_pattern,
+        result.repeated_pattern,
     )
     print_key_value(
         "Sequential pattern",
-        result.has_sequential_pattern,
+        result.sequential_pattern,
     )
     print_key_value(
         "Keyboard pattern",
-        result.has_keyboard_pattern,
+        result.keyboard_pattern,
     )
     print_key_value(
         "Year pattern",
-        result.has_year_pattern,
+        result.year_pattern,
     )
     print_key_value(
         "Leetspeak",
-        result.has_leetspeak,
+        result.leetspeak_pattern,
     )
     print_key_value(
         "Predictability score",
