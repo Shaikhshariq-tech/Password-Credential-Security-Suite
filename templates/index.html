@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+    <title>{{ app_name }}</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #0b1120;
+            color: #e5e7eb;
+            line-height: 1.6;
+        }
+
+        .container {
+            width: min(1100px, 92%);
+            margin: 0 auto;
+        }
+
+        header {
+            padding: 55px 0 35px;
+            border-bottom: 1px solid #1f2937;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border: 1px solid #334155;
+            border-radius: 999px;
+            color: #93c5fd;
+            font-size: 13px;
+            margin-bottom: 15px;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: clamp(30px, 5vw, 52px);
+            line-height: 1.1;
+        }
+
+        .subtitle {
+            color: #94a3b8;
+            max-width: 800px;
+            margin-top: 18px;
+            font-size: 17px;
+        }
+
+        .warning {
+            margin-top: 25px;
+            padding: 16px 18px;
+            border-left: 4px solid #f59e0b;
+            background: #17130b;
+            color: #fcd34d;
+        }
+
+        main {
+            padding: 40px 0 70px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 24px;
+        }
+
+        .card {
+            background: #111827;
+            border: 1px solid #1f2937;
+            border-radius: 14px;
+            padding: 25px;
+        }
+
+        .card h2 {
+            margin-top: 0;
+            color: #f8fafc;
+        }
+
+        .card p {
+            color: #94a3b8;
+        }
+
+        label {
+            display: block;
+            margin: 15px 0 7px;
+            color: #cbd5e1;
+            font-weight: bold;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #334155;
+            background: #020617;
+            color: #f8fafc;
+            outline: none;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: #60a5fa;
+        }
+
+        button {
+            margin-top: 18px;
+            padding: 11px 18px;
+            border: 0;
+            border-radius: 8px;
+            background: #2563eb;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        .result {
+            margin-top: 22px;
+            padding: 18px;
+            border-radius: 10px;
+            background: #020617;
+            border: 1px solid #334155;
+        }
+
+        .score {
+            font-size: 30px;
+            font-weight: bold;
+        }
+
+        .strength {
+            display: inline-block;
+            margin-left: 8px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: #1e3a8a;
+            color: #bfdbfe;
+            font-size: 13px;
+        }
+
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .metric {
+            padding: 10px;
+            background: #111827;
+            border-radius: 8px;
+        }
+
+        .metric strong {
+            display: block;
+            color: #f8fafc;
+        }
+
+        .metric span {
+            color: #94a3b8;
+            font-size: 13px;
+        }
+
+        ul {
+            padding-left: 20px;
+        }
+
+        li {
+            margin-bottom: 7px;
+        }
+
+        .error {
+            margin-top: 20px;
+            padding: 13px;
+            background: #3f1010;
+            border: 1px solid #7f1d1d;
+            color: #fecaca;
+            border-radius: 8px;
+        }
+
+        .success {
+            color: #86efac;
+        }
+
+        footer {
+            padding: 25px 0;
+            border-top: 1px solid #1f2937;
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        code {
+            color: #93c5fd;
+        }
+
+        @media (max-width: 600px) {
+            .metrics {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div class="container">
+        <span class="badge">Controlled Laboratory Security Demonstration</span>
+
+        <h1>{{ app_name }}</h1>
+
+        <p class="subtitle">
+            Web demonstration of password-security analysis and hash analysis
+            powered by the project's existing Python security modules.
+        </p>
+
+        <div class="warning">
+            <strong>Authorized Use Only:</strong>
+            Use this application only with passwords, hashes, and systems
+            that you own or are explicitly authorized to assess.
+            Do not submit real account passwords.
+        </div>
+    </div>
+</header>
+
+<main>
+    <div class="container">
+
+        {% if error %}
+        <div class="error">
+            {{ error }}
+        </div>
+        {% endif %}
+
+        <div class="grid">
+
+            <section class="card">
+                <h2>Password Security Analysis</h2>
+
+                <p>
+                    Analyze password length, entropy, character composition,
+                    predictability, common patterns, and security score.
+                </p>
+
+                <form method="post" action="/analyze-password">
+                    <label for="password">Laboratory Password</label>
+
+                    <input
+                        id="password"
+                        name="password"
+                        type="password"
+                        placeholder="Enter a test password"
+                        autocomplete="off"
+                        required
+                    >
+
+                    <button type="submit">
+                        Analyze Password
+                    </button>
+                </form>
+
+                {% if password_result %}
+                <div class="result">
+
+                    <div>
+                        <span class="score">
+                            {{ password_result.security_score }}
+                        </span>
+                        / 100
+
+                        <span class="strength">
+                            {{ password_result.strength }}
+                        </span>
+                    </div>
+
+                    <div class="metrics">
+                        <div class="metric">
+                            <strong>
+                                {{ password_result.password_length }}
+                            </strong>
+                            <span>Length</span>
+                        </div>
+
+                        <div class="metric">
+                            <strong>
+                                {{ password_result.entropy_bits }}
+                            </strong>
+                            <span>Entropy Bits</span>
+                        </div>
+
+                        <div class="metric">
+                            <strong>
+                                {{ password_result.character_space }}
+                            </strong>
+                            <span>Character Space</span>
+                        </div>
+
+                        <div class="metric">
+                            <strong>
+                                {{ password_result.unique_characters }}
+                            </strong>
+                            <span>Unique Characters</span>
+                        </div>
+
+                        <div class="metric">
+                            <strong>
+                                {{ password_result.predictability_score }}
+                            </strong>
+                            <span>Predictability</span>
+                        </div>
+
+                        <div class="metric">
+                            <strong>
+                                {{ password_result.patterns.common_password }}
+                            </strong>
+                            <span>Common Password</span>
+                        </div>
+                    </div>
+
+                    <h3>Findings</h3>
+                    <ul>
+                        {% for finding in password_result.findings %}
+                        <li>{{ finding }}</li>
+                        {% endfor %}
+                    </ul>
+
+                    <h3>Recommendations</h3>
+                    <ul>
+                        {% for recommendation in password_result.recommendations %}
+                        <li>{{ recommendation }}</li>
+                        {% endfor %}
+                    </ul>
+
+                </div>
+                {% endif %}
+            </section>
+
+
+            <section class="card">
+                <h2>Hash Format Analysis</h2>
+
+                <p>
+                    Identify possible supported hexadecimal hash formats
+                    based on the structure of the supplied laboratory value.
+                </p>
+
+                <form method="post" action="/analyze-hash">
+
+                    <label for="hash_value">Hash Value</label>
+
+                    <input
+                        id="hash_value"
+                        name="hash_value"
+                        type="text"
+                        value="{{ hash_value }}"
+                        placeholder="Enter a laboratory hash"
+                        autocomplete="off"
+                    >
+
+                    <button type="submit">
+                        Identify Hash
+                    </button>
+                </form>
+
+                {% if hash_result is not none %}
+                <div class="result">
+
+                    {% if hash_result %}
+                    <p class="success">
+                        Possible supported format(s):
+                    </p>
+
+                    <ul>
+                        {% for algorithm in hash_result %}
+                        <li><strong>{{ algorithm }}</strong></li>
+                        {% endfor %}
+                    </ul>
+
+                    <p>
+                        Note: hash length alone cannot prove the algorithm.
+                    </p>
+
+                    {% else %}
+                    <p>
+                        No supported format was identified.
+                    </p>
+                    {% endif %}
+
+                </div>
+                {% endif %}
+            </section>
+
+
+            <section class="card">
+                <h2>Laboratory Hash Generator</h2>
+
+                <p>
+                    Generate hashes from controlled laboratory test values
+                    using the project's supported algorithms.
+                </p>
+
+                <form method="post" action="/generate-hash">
+
+                    <label for="hash_password">
+                        Laboratory Password
+                    </label>
+
+                    <input
+                        id="hash_password"
+                        name="hash_password"
+                        type="password"
+                        placeholder="Enter a test password"
+                        autocomplete="off"
+                        required
+                    >
+
+                    <label for="hash_algorithm">
+                        Hash Algorithm
+                    </label>
+
+                    <select
+                        id="hash_algorithm"
+                        name="hash_algorithm"
+                    >
+                        {% for key, label in algorithms.items() %}
+                        <option
+                            value="{{ key }}"
+                            {% if key == hash_algorithm %}
+                            selected
+                            {% endif %}
+                        >
+                            {{ label }}
+                        </option>
+                        {% endfor %}
+                    </select>
+
+                    <button type="submit">
+                        Generate Hash
+                    </button>
+                </form>
+
+                {% if generated_hash %}
+                <div class="result">
+                    <strong>Generated Hash</strong>
+
+                    <p>
+                        <code>{{ generated_hash }}</code>
+                    </p>
+                </div>
+                {% endif %}
+            </section>
+
+
+            <section class="card">
+                <h2>Project Capabilities</h2>
+
+                <p>
+                    The complete local application provides additional
+                    controlled-laboratory functionality.
+                </p>
+
+                <ul>
+                    <li>Password intelligence analysis</li>
+                    <li>Hash-format analysis</li>
+                    <li>Dictionary attack simulation</li>
+                    <li>Bounded brute-force simulation</li>
+                    <li>Mutation-based candidate generation</li>
+                    <li>Crack-time estimation</li>
+                    <li>Structured audit reporting</li>
+                    <li>JSON and text report generation</li>
+                    <li>Automated regression testing</li>
+                </ul>
+
+                <p>
+                    Full laboratory functionality remains available through
+                    the project's CLI application.
+                </p>
+            </section>
+
+        </div>
+    </div>
+</main>
+
+<footer>
+    <div class="container">
+        {{ app_name }} · Version {{ version }} ·
+        Controlled laboratory security assessment
+    </div>
+</footer>
+
+</body>
+</html>
